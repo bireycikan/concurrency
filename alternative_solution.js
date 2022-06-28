@@ -19,7 +19,7 @@ const run = async (tasks) => {
   let concurrentTasks = 0;
 
   for (let i = 0; i < tasks.length; i++) {
-    // we are waiting for our concurrency permission until any queued job is resolved or rejected
+    // we are waiting for our concurrency permission until next queued job is resolved or rejected
     while (concurrentTasks >= CONCURRENT_LIMIT) {
       await sleep(1)
     }
