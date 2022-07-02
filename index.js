@@ -16,6 +16,23 @@ const worker = async (id) => {
 const run = async (tasks) => {
   // TODO
 
+  let concurrentTasks = 0;
+
+  for (let i = 0; i < tasks.length; i++) {
+    // we are waiting for our concurrency permission until next queued job is resolved or rejected
+    while (concurrentTasks >= CONCURRENT_LIMIT) {
+      await sleep(1)
+    }
+
+    // we say that we are fine to keep going from next job
+    concurrentTasks++;
+
+    worker(tasks[i])
+      .finally(() => {
+        // we say that our job is either resolved or rejected and we can take another job into queue
+        concurrentTasks--;
+      })
+  }
 }
 
 run(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'])
