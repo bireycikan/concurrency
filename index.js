@@ -16,28 +16,6 @@ const worker = async (id) => {
 const run = async (tasks) => {
   // TODO
 
-  let nextJob = 0;
-
-  for (nextJob = 0; nextJob < CONCURRENT_LIMIT; nextJob++) {
-    const promise = worker(tasks[nextJob]);
-
-    promise.then(() => {
-      runNext(tasks);
-    })
-  }
-
-  function runNext(tasks) {
-    if (nextJob === tasks.length) {
-      return;
-    }
-
-    const promise = worker(tasks[nextJob]);
-    nextJob++;
-
-    promise.then(() => {
-      runNext(tasks);
-    })
-  }
 }
 
 run(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'])
